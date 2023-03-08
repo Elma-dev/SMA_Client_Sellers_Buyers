@@ -89,7 +89,6 @@ public class Client extends  GuiAgent {
                     while (allServices.hasNext()){
                         String name = ((ServiceDescription) allServices.next()).getName();
                         if(name.indexOf((String) guiEvent.getParameter(0))!=-1){
-                            System.out.println("Yes");
                             Platform.runLater(()->{
                                 clientContainer.observableList.add( new Text(name));
                             });
@@ -103,10 +102,16 @@ public class Client extends  GuiAgent {
             }
 
         }
+        if(((Button)(guiEvent.getSource())).getText()=="Info"){
+            sendMsgToSellers((String)guiEvent.getParameter(0));
+        }
 
     }
 
     void sendMsgToSellers(String msgTxt){
-
+        ACLMessage message=new ACLMessage(ACLMessage.PROPOSE);
+        message.setContent(msgTxt);
+        for
+        message.addReceiver("");
     }
 }

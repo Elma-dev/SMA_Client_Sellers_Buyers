@@ -44,6 +44,8 @@ public class clientContainer extends Application {
         TextField textField=new TextField();
         textField.setPromptText("Mac,Hp,Dell,...");
         Button search=new Button("Search");
+        Button info = new Button("Info");
+        Button sell = new Button("Sell");
 
 
         TextArea textArea=new TextArea();
@@ -60,8 +62,8 @@ public class clientContainer extends Application {
 
         //hbox2
         hBox[1]=new HBox();
-        hBox[1].getChildren().add(new Button("Info"));
-        hBox[1].getChildren().add(new Button("Sell"));
+        hBox[1].getChildren().add(info);
+        hBox[1].getChildren().add(sell);
         hBox[1].setAlignment(Pos.CENTER);
         hBox[1].setSpacing(10);
         hBox[1].setPadding(new Insets(10));
@@ -83,6 +85,14 @@ public class clientContainer extends Application {
             if(!textField.getText().isEmpty()) {
                 GuiEvent guiEvent = new GuiEvent(search, 1);
                 guiEvent.addParameter(textField.getText());
+                client.onGuiEvent(guiEvent);
+            }
+        });
+
+        info.setOnAction(actionEvent -> {
+            if(listView.getSelectionModel().getSelectedItems().size()!=0){
+                GuiEvent guiEvent = new GuiEvent(info, 1);
+                guiEvent.addParameter(listView.getSelectionModel().getSelectedItems().get(0).getText());
                 client.onGuiEvent(guiEvent);
             }
         });
