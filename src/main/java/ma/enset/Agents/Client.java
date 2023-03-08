@@ -78,10 +78,10 @@ public class Client extends  GuiAgent {
 
     @Override
     public void onGuiEvent(GuiEvent guiEvent) {
-
+        ArrayList<AID> NameSellerHasIt=new ArrayList<>();
         if(((Button)(guiEvent.getSource())).getText()=="Search"){
             clientContainer.listView.getItems().clear();
-            ArrayList<Text> computerSType=new ArrayList<>();
+            NameSellerHasIt.clear();
             try {
                 DFAgentDescription[] search = DFService.search(this, dfAgentDescription);
                 for(int i=0;i<search.length;i++){
@@ -89,6 +89,9 @@ public class Client extends  GuiAgent {
                     while (allServices.hasNext()){
                         String name = ((ServiceDescription) allServices.next()).getName();
                         if(name.indexOf((String) guiEvent.getParameter(0))!=-1){
+                            if(NameSellerHasIt.indexOf(search[i].getName())==-1){
+                                NameSellerHasIt.add(search[i].getName());
+                            }
                             Platform.runLater(()->{
                                 clientContainer.observableList.add( new Text(name));
                             });
@@ -103,15 +106,16 @@ public class Client extends  GuiAgent {
 
         }
         if(((Button)(guiEvent.getSource())).getText()=="Info"){
-            sendMsgToSellers((String)guiEvent.getParameter(0));
+            sendMsgToSellers((String)guiEvent.getParameter(0),NameSellerHasIt);
         }
 
     }
 
-    void sendMsgToSellers(String msgTxt){
+    void sendMsgToSellers(String msgTxt,ArrayList<AID> to){
         ACLMessage message=new ACLMessage(ACLMessage.PROPOSE);
         message.setContent(msgTxt);
-        for
-        message.addReceiver("");
+        for(AID aid : to)
+            message.addReceiver(aid);
+        send(message);
     }
 }
