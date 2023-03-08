@@ -1,12 +1,14 @@
 package ma.enset.Agents;
 
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ParallelBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 
 public class Vendeur extends Agent {
     @Override
@@ -44,6 +46,17 @@ public class Vendeur extends Agent {
                     }
                 }
         );
+        parallelBehaviour.addSubBehaviour(new CyclicBehaviour() {
+            @Override
+            public void action() {
+                ACLMessage receive = receive();
+                if(receive!=null){
+                    System.out.println(receive.getSender()+" "+receive.getContent());
+                }else
+                    block();
+
+            }
+        });
        addBehaviour(parallelBehaviour);
     }
 

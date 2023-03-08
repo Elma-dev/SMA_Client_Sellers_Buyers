@@ -26,6 +26,7 @@ import java.util.Arrays;
 public class Client extends  GuiAgent {
     clientContainer clientContainer;
     DFAgentDescription dfAgentDescription=new DFAgentDescription();
+    ArrayList<AID> NameSellerHasIt=new ArrayList<>();
     @Override
     protected void setup() {
         ParallelBehaviour parallelBehaviour = new ParallelBehaviour();
@@ -78,7 +79,6 @@ public class Client extends  GuiAgent {
 
     @Override
     public void onGuiEvent(GuiEvent guiEvent) {
-        ArrayList<AID> NameSellerHasIt=new ArrayList<>();
         if(((Button)(guiEvent.getSource())).getText()=="Search"){
             clientContainer.listView.getItems().clear();
             NameSellerHasIt.clear();
@@ -89,6 +89,7 @@ public class Client extends  GuiAgent {
                     while (allServices.hasNext()){
                         String name = ((ServiceDescription) allServices.next()).getName();
                         if(name.indexOf((String) guiEvent.getParameter(0))!=-1){
+                            System.out.println(NameSellerHasIt.indexOf(search[i].getName()));
                             if(NameSellerHasIt.indexOf(search[i].getName())==-1){
                                 NameSellerHasIt.add(search[i].getName());
                             }
@@ -106,6 +107,7 @@ public class Client extends  GuiAgent {
 
         }
         if(((Button)(guiEvent.getSource())).getText()=="Info"){
+            System.out.println(NameSellerHasIt);
             sendMsgToSellers((String)guiEvent.getParameter(0),NameSellerHasIt);
         }
 
@@ -114,8 +116,10 @@ public class Client extends  GuiAgent {
     void sendMsgToSellers(String msgTxt,ArrayList<AID> to){
         ACLMessage message=new ACLMessage(ACLMessage.PROPOSE);
         message.setContent(msgTxt);
+        System.out.println(to);
         for(AID aid : to)
             message.addReceiver(aid);
+        System.out.println(message);
         send(message);
     }
 }
