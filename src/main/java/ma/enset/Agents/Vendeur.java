@@ -25,11 +25,11 @@ public class Vendeur extends Agent {
 
                         ServiceDescription serviceDescription2=new ServiceDescription();
                         serviceDescription2.setType("Computers");
-                        serviceDescription2.setName("Lenovo T460");
+                        serviceDescription2.setName("Lenovo T470");
 
                         ServiceDescription serviceDescription3=new ServiceDescription();
                         serviceDescription3.setType("Computers");
-                        serviceDescription3.setName("Lenovo T460");
+                        serviceDescription3.setName("Lenovo T480s");
 
                         dfAgentDescription.addServices(serviceDescription1);
                         dfAgentDescription.addServices(serviceDescription2);

@@ -12,20 +12,25 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
+import jade.lang.acl.ACLMessage;
+import jade.util.leap.Iterator;
+import javafx.scene.control.Button;
+import javafx.scene.text.Text;
 import ma.enset.Container.clientContainer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class Client extends  GuiAgent {
     clientContainer clientContainer;
+    DFAgentDescription dfAgentDescription=new DFAgentDescription();
     @Override
     protected void setup() {
         ParallelBehaviour parallelBehaviour = new ParallelBehaviour();
-        DFAgentDescription dfAgentDescription=new DFAgentDescription();
         parallelBehaviour.addSubBehaviour(new TickerBehaviour(this,5000) {
             @Override
             protected void onTick() {
+                /*
                 try {
                     DFAgentDescription[] search = DFService.search(myAgent, dfAgentDescription);
                     AID[] cservices=new AID[search.length];
@@ -37,6 +42,8 @@ public class Client extends  GuiAgent {
                 } catch (FIPAException e) {
                     throw new RuntimeException(e);
                 }
+
+                 */
             }
         });
         parallelBehaviour.addSubBehaviour(new OneShotBehaviour() {
@@ -70,8 +77,28 @@ public class Client extends  GuiAgent {
     @Override
     public void onGuiEvent(GuiEvent guiEvent) {
 
+        if(((Button)(guiEvent.getSource())).getText()=="Search"){
+            ArrayList<Text> computerSType=new ArrayList<>();
+            try {
+                DFAgentDescription[] search = DFService.search(this, dfAgentDescription);
+                for(int i=0;i<search.length;i++){
+                    Iterator allServices = search[i].getAllServices();
+                    while (allServices.hasNext()){
+                        System.out.println(((ServiceDescription)allServices.next()).getName());
+                    }
+                }
+
+            } catch (FIPAException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
         System.out.println(guiEvent.getParameter(0));
+
     }
 
-    voi
+    void sendMsgToSellers(String msgTxt){
+
+    }
 }
