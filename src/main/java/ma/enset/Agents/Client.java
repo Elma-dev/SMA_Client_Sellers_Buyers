@@ -2,6 +2,7 @@ package ma.enset.Agents;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.Node;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.ParallelBehaviour;
@@ -14,6 +15,7 @@ import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 import jade.util.leap.Iterator;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import ma.enset.Container.clientContainer;
@@ -84,7 +86,17 @@ public class Client extends  GuiAgent {
                 for(int i=0;i<search.length;i++){
                     Iterator allServices = search[i].getAllServices();
                     while (allServices.hasNext()){
-                        System.out.println(((ServiceDescription)allServices.next()).getName());
+                        String name = ((ServiceDescription) allServices.next()).getName();
+                        System.out.println(name);
+                        System.out.println(name.indexOf((String) guiEvent.getParameter(0)));
+                        if(name.indexOf((String) guiEvent.getParameter(0))!=-1){
+                            System.out.println("Yes");
+                            Platform.runLater(()->{
+                                clientContainer.observableList.add((Node) new Text(name));
+                            });
+
+                        }
+
                     }
                 }
 
@@ -93,8 +105,6 @@ public class Client extends  GuiAgent {
             }
 
         }
-
-        System.out.println(guiEvent.getParameter(0));
 
     }
 
