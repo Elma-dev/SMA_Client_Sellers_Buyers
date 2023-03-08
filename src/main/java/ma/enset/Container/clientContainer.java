@@ -21,13 +21,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ma.enset.Agents.Client;
 
 
 public class clientContainer extends Application {
     public Client client;
-    public ObservableList<Node> observableList= FXCollections.observableArrayList();
+    public ObservableList<Text> observableList= FXCollections.observableArrayList();
+    public ListView<Text> listView=new ListView<>(observableList);
     public static void main(String[] args) {
         launch();
     }
@@ -42,7 +44,7 @@ public class clientContainer extends Application {
         TextField textField=new TextField();
         textField.setPromptText("Mac,Hp,Dell,...");
         Button search=new Button("Search");
-        ListView<Node> listView=new ListView<>(observableList);
+
 
         TextArea textArea=new TextArea();
         textArea.setDisable(true);

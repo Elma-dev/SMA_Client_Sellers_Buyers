@@ -80,6 +80,7 @@ public class Client extends  GuiAgent {
     public void onGuiEvent(GuiEvent guiEvent) {
 
         if(((Button)(guiEvent.getSource())).getText()=="Search"){
+            clientContainer.listView.getItems().clear();
             ArrayList<Text> computerSType=new ArrayList<>();
             try {
                 DFAgentDescription[] search = DFService.search(this, dfAgentDescription);
@@ -87,14 +88,11 @@ public class Client extends  GuiAgent {
                     Iterator allServices = search[i].getAllServices();
                     while (allServices.hasNext()){
                         String name = ((ServiceDescription) allServices.next()).getName();
-                        System.out.println(name);
-                        System.out.println(name.indexOf((String) guiEvent.getParameter(0)));
                         if(name.indexOf((String) guiEvent.getParameter(0))!=-1){
                             System.out.println("Yes");
                             Platform.runLater(()->{
-                                clientContainer.observableList.add((Node) new Text(name));
+                                clientContainer.observableList.add( new Text(name));
                             });
-
                         }
 
                     }
