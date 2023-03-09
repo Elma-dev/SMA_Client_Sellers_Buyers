@@ -97,6 +97,14 @@ public class clientContainer extends Application {
                 client.onGuiEvent(guiEvent);
             }
         });
+        sell.setOnAction(actionEvent -> {
+            if(listView.getSelectionModel().getSelectedItems().size()!=0){
+                GuiEvent guiEvent = new GuiEvent(sell, 1);
+                client.onGuiEvent(guiEvent);
+            }
+        });
+
+
 
         //add to root
         root.getChildren().add(vBox);

@@ -65,9 +65,15 @@ public class Client extends  GuiAgent {
             public void action() {
                 ACLMessage receive = receive();
                 if(receive!=null){
-                    Platform.runLater(()->{
-                        clientContainer.textArea.setText(receive.getContent());
-                    });
+                    if(receive.getPerformative()==ACLMessage.ACCEPT_PROPOSAL){
+                        Platform.runLater(()->{
+                            clientContainer.textArea.setText(receive.getContent());
+                        });
+                    }else if(receive.getPerformative()==ACLMessage.AGREE){
+                        Platform.runLater(()->{
+                            clientContainer.textArea.setText("Your Command Has Been Accepted ✨✨✨");
+                        });
+                    }
                 }else {
                     block();
                 }
@@ -118,9 +124,15 @@ public class Client extends  GuiAgent {
             }
 
         }
-        if(((Button)(guiEvent.getSource())).getText()=="Info"){
+        else if(((Button)(guiEvent.getSource())).getText()=="Info"){
             System.out.println(NameSellerHasIt);
             sendMsgToSellers((String)guiEvent.getParameter(0),NameSellerHasIt);
+        }
+        else {
+            ACLMessage sellMessage=new ACLMessage(ACLMessage.CONFIRM);
+            System.out.println(NameSellerHasIt);
+            sellMessage.addReceiver(NameSellerHasIt.get(0));
+            send(sellMessage);
         }
 
     }

@@ -59,11 +59,17 @@ public class Vendeur extends Agent {
             public void action() {
                 ACLMessage receive = receive();
                 if(receive!=null){
-                    String computer=receive.getContent();
-                    if(dict.containsKey(computer)){
-                        ACLMessage response=new ACLMessage();
+                    if(receive.getPerformative()==ACLMessage.PROPOSE) {
+                        String computer = receive.getContent();
+                        if (dict.containsKey(computer)) {
+                            ACLMessage response = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
+                            response.addReceiver(receive.getSender());
+                            response.setContent(computer + " " + dict.get(computer));
+                            send(response);
+                        }
+                    }else {
+                        ACLMessage response = new ACLMessage(ACLMessage.AGREE);
                         response.addReceiver(receive.getSender());
-                        response.setContent(dict.get(computer));
                         send(response);
                     }
                 }else
