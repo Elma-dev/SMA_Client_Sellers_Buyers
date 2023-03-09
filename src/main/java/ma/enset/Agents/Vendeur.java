@@ -8,11 +8,13 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import jade.gui.GuiAgent;
+import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
 
 import java.util.HashMap;
 
-public class Vendeur extends Agent {
+public class Vendeur extends GuiAgent {
     HashMap<String,String> dict;
     @Override
     protected void setup() {
@@ -89,4 +91,8 @@ public class Vendeur extends Agent {
         }
     }
 
+    @Override
+    protected void onGuiEvent(GuiEvent guiEvent) {
+        System.out.println(guiEvent.getParameter(0));
+    }
 }
