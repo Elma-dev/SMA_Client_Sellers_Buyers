@@ -3,10 +3,7 @@ package ma.enset.Agents;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.Node;
-import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.ParallelBehaviour;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.*;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
@@ -63,9 +60,24 @@ public class Client extends  GuiAgent {
             clientContainer.client=this;
         }
 
-        System.out.println("Hellooo Cliennnttt");
+        parallelBehaviour.addSubBehaviour(new CyclicBehaviour() {
+            @Override
+            public void action() {
+                ACLMessage receive = receive();
+                if(receive!=null){
+                    Platform.runLater(()->{
+                        clientContainer.textArea.setText(receive.getContent());
+                    });
+                }else {
+                    block();
+                }
+            }
+        });
+
         addBehaviour(parallelBehaviour);
     }
+
+
 
 
     @Override

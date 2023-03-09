@@ -10,9 +10,17 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 
+import java.util.HashMap;
+
 public class Vendeur extends Agent {
+    HashMap<String,String> dict;
     @Override
     protected void setup() {
+        dict=new HashMap<>();
+        dict.put("Lenovo T460","i5 6gen 3000DH");
+        dict.put("Lenovo T470","i7 10gen 6000DH");
+        dict.put("Lenovo T480s","i9 11gen 9000DH");
+
         ParallelBehaviour parallelBehaviour=new ParallelBehaviour();
         parallelBehaviour.addSubBehaviour(
                 new OneShotBehaviour() {
@@ -51,7 +59,13 @@ public class Vendeur extends Agent {
             public void action() {
                 ACLMessage receive = receive();
                 if(receive!=null){
-                    System.out.println(receive.getSender()+" "+receive.getContent());
+                    String computer=receive.getContent();
+                    if(dict.containsKey(computer)){
+                        ACLMessage response=new ACLMessage();
+                        response.addReceiver(receive.getSender());
+                        response.setContent(dict.get(computer));
+                        send(response);
+                    }
                 }else
                     block();
 

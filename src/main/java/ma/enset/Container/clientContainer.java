@@ -30,6 +30,7 @@ public class clientContainer extends Application {
     public Client client;
     public ObservableList<Text> observableList= FXCollections.observableArrayList();
     public ListView<Text> listView=new ListView<>(observableList);
+    public TextArea textArea=new TextArea();
     public static void main(String[] args) {
         launch();
     }
@@ -48,7 +49,7 @@ public class clientContainer extends Application {
         Button sell = new Button("Sell");
 
 
-        TextArea textArea=new TextArea();
+
         textArea.setDisable(true);
         textArea.setStyle("-fx-opacity: 1");
 
