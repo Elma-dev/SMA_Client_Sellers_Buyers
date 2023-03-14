@@ -11,13 +11,24 @@ import jade.domain.FIPAException;
 import jade.gui.GuiAgent;
 import jade.gui.GuiEvent;
 import jade.lang.acl.ACLMessage;
+import ma.enset.Container.VendeursContainer;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
+
+import static jade.core.MicroRuntime.getAgent;
 
 public class Vendeur extends GuiAgent {
     HashMap<String,String> dict;
+    VendeursContainer vendeursContainer;
+    DFAgentDescription dfAgentDescription;
     @Override
     protected void setup() {
+
+        if(this.getArguments()!=null){
+            vendeursContainer =(VendeursContainer) this.getArguments()[0];
+            vendeursContainer.vendeur=this;
+        }
         dict=new HashMap<>();
         dict.put("Lenovo T460","i5 6gen 3000DH");
         dict.put("Lenovo T470","i7 10gen 6000DH");
@@ -28,31 +39,12 @@ public class Vendeur extends GuiAgent {
                 new OneShotBehaviour() {
                     @Override
                     public void action() {
-                        DFAgentDescription dfAgentDescription=new DFAgentDescription();
-                        dfAgentDescription.setName(getAID());
-
-                        ServiceDescription serviceDescription1=new ServiceDescription();
-                        serviceDescription1.setType("Computers");
-                        serviceDescription1.setName("Lenovo T460");
-
-                        ServiceDescription serviceDescription2=new ServiceDescription();
-                        serviceDescription2.setType("Computers");
-                        serviceDescription2.setName("Lenovo T470");
-
-                        ServiceDescription serviceDescription3=new ServiceDescription();
-                        serviceDescription3.setType("Computers");
-                        serviceDescription3.setName("Lenovo T480s");
-
-                        dfAgentDescription.addServices(serviceDescription1);
-                        dfAgentDescription.addServices(serviceDescription2);
-                        dfAgentDescription.addServices(serviceDescription3);
-
+                        dfAgentDescription=new DFAgentDescription();
                         try {
-                            DFService.register(getAgent(),dfAgentDescription);
+                            DFService.register(myAgent,dfAgentDescription);
                         } catch (FIPAException e) {
-                            throw new RuntimeException(e);
+                            e.printStackTrace();
                         }
-
                     }
                 }
         );
@@ -86,13 +78,30 @@ public class Vendeur extends GuiAgent {
     protected void takeDown() {
         try {
             DFService.deregister(this);
+            System.out.println("deregister of agent");
         } catch (FIPAException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    protected void onGuiEvent(GuiEvent guiEvent) {
-        System.out.println(guiEvent.getParameter(0));
+    public void onGuiEvent(GuiEvent guiEvent) {
+
+        String parameter = (String) (guiEvent.getParameter(0));
+        System.out.println(parameter);
+        System.out.println(parameter.split(":"));
+        String[] computer=parameter.split(":");
+        System.out.println(computer[0] + " "+computer[1]);
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType("Computers");
+        serviceDescription.setName(computer[0]);
+        dfAgentDescription.addServices(serviceDescription);
+        try {
+            DFService.modify(this,dfAgentDescription);
+        } catch (FIPAException e) {
+            throw new RuntimeException(e);
+        }
+
+        dict.put(computer[0],computer[1]+" "+computer[2]);
     }
 }
